@@ -167,4 +167,8 @@ def courses_by_teacher(request, teacher):
     courses = models.Course.objects.filter(teacher__username=teacher)  #the double underscore in this case jumps from one relationship to another
     return render(request, 'courses/course_list.html', {'courses': courses})
 
+def search(request):
+    term = request.GET.get('q')
+    courses = models.Course.objects.filter(title__icontains=term)   #title is a field in courses and icontains makees the data insensitive to search.
+    return render(request, 'courses/course_list.html', {'courses': courses})
     
