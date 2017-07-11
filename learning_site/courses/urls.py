@@ -1,6 +1,10 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
+from django.conf import settings
 
 from . import views
+
+
+
 
 urlpatterns = [
     url(r'^$', views.course_list, name='list'),
@@ -22,3 +26,9 @@ urlpatterns = [
         views.answer_form, name='create_answer'),
     url(r'(?P<pk>\d+)/$', views.course_detail, name='detail'),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
