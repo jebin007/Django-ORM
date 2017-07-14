@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.db.models import Q
 
 from . import forms
 from . import models
@@ -176,7 +177,9 @@ def courses_by_teacher(request, teacher):
 
 def search(request):
     term = request.GET.get('q')
-    courses = models.Course.objects.filter(title__icontains=term,
-                                           published=True)   #title is a field in courses and icontains makees the data insensitive to search.
+    courses = models.Course.objects.filter(
+                                           Q(title__icontains=term) | Q(description__icontains=term), published=True
+                                          )     #the pipe character makes it an OR
+                                           #title is a field in courses and icontains makees the data insensitive to search.
     return render(request, 'courses/course_list.html', {'courses': courses})
     
